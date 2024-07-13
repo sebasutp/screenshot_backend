@@ -1,8 +1,11 @@
+""" Model classes and data persistence.
+"""
+
 import os
-from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, Union
 
-from sqlmodel import Field, Session, SQLModel, Relationship, create_engine
+from pydantic import BaseModel, EmailStr
+from sqlmodel import Field, Session, SQLModel, create_engine
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(
@@ -11,10 +14,12 @@ engine = create_engine(
     connect_args=connect_args)
 
 def get_db_session():
+    """Returns DB session."""
     with Session(engine) as session:
         yield session
 
 def create_db_and_tables():
+    """Creates database with schema."""
     SQLModel.metadata.create_all(engine)
 
 class Token(BaseModel):
