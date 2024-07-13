@@ -9,22 +9,40 @@ screenshots from Chrome and add them to the backend.
 
 1. Fork/Clone
 
-1. Create and activate a virtual environment:
+2. Create and activate a virtual environment:
 
     ```sh
     $ python3 -m venv venv && source venv/bin/activate
     ```
 
-1. Install the requirements:
+3. Install the requirements:
 
     ```sh
     (venv)$ pip install -r requirements.txt
     ```
 
-1. Run the app:
+4. Create a `.env` file in the root folder and add the following configuration:
+
+    ```sh
+    JWT_SECRET="some random secret key"
+    JWT_ALGORITHM="HS256"
+    DB_URL="sqlite:///database.db"
+    ```
+
+5. Run the app:
 
     ```sh
     (venv)$ python main.py
     ```
 
-1. Test at [http://localhost:8081/docs](http://localhost:8081/docs)
+6. Test at [http://localhost:8081/docs](http://localhost:8081/docs)
+
+**Note**: the random secret `JWT_SECRET` can be generated for example 
+using a command like this one:
+
+```sh
+openssl rand -hex 32
+```
+
+Feel free to change any of the configuration variables in `.env` to
+match your needs.

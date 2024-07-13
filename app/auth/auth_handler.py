@@ -1,4 +1,4 @@
-import time
+import os
 from typing import Dict, Annotated
 from datetime import datetime, timedelta, timezone
 from typing import Union
@@ -12,8 +12,8 @@ import app.model as model
 import app.auth.crypto as crypto
 
 
-JWT_SECRET = "96706f2fb5daf56405a9f2554399e53e93fe2b5f22c1b6bfc48c1d1f77a79151"
-JWT_ALGORITHM = "HS256"
+JWT_SECRET = os.getenv("JWT_SECRET")
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

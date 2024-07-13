@@ -1,13 +1,14 @@
+import os
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, Union
 
 from sqlmodel import Field, Session, SQLModel, Relationship, create_engine
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-
 connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+engine = create_engine(
+    os.getenv("DB_URL"),
+    echo=True,
+    connect_args=connect_args)
 
 def get_db_session():
     with Session(engine) as session:
