@@ -44,6 +44,14 @@ class User(UserCreate, table=True):
     id: int = Field(default=None, primary_key=True)
     #screenshots: list["Screenshot"] = Relationship(back_populates="owner")
 
+class ApiTokenCreate(SQLModel):
+    name: str = Field(...)
+    token: str = Field(...)
+
+class ApiToken(ApiTokenCreate, table=True)
+    id: int = Field(default=None, primary_key=True)
+    owner_id: int | None = Field(default=None, foreign_key="user.id")
+
 class ScreenshotCreate(SQLModel):
     url: str = Field(...)
     img: str = Field(...)

@@ -4,6 +4,7 @@ from datetime import timedelta
 from typing import Annotated
 
 from fastapi import Body, Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 
@@ -11,7 +12,15 @@ from app.auth import auth_handler
 from app.auth import crypto
 from app import model
 
+
 app_obj = FastAPI()
+app_obj.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,  # Set to True if cookies are needed
+    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 
 @app_obj.on_event("startup")
@@ -48,7 +57,7 @@ async def login(
         A `model.Token` object containing the access token and token type.
     """
     user = model.UserLogin(email=form_data.username,
-                           password=form_data.password)
+                        password=form_data.password)
     db_user = auth_handler.check_and_get_user(user, session)
     if not db_user:
         raise HTTPException(
@@ -61,7 +70,7 @@ async def login(
 async def get_screenshots(
     *,
     session: Session = Depends(model.get_db_session),
-        current_user_id: model.UserId = Depends(auth_handler.get_current_user_id)):
+    current_user_id: model.UserId = Depends(auth_handler.get_current_user_id)):
     """
     Retrieves a list of screenshots owned by the currently authenticated user.
 
@@ -85,11 +94,11 @@ async def get_screenshots(
     return session.exec(statement)
 
 
-@app_obj.get("/screenshots/{id}", tags=["screenshots"], response_model=model.Screenshot)
+@app_obj.get("/screenshots/{screenshot_id}", tags=["screenshots"], response_model=model.Screenshot)
 async def get_single_screenshot(
     *,
     session: Session = Depends(model.get_db_session),
-        screenshot_id: str):
+    screenshot_id: str):
     """
     Retrieves a specific screenshot by its external ID.
 
@@ -123,7 +132,7 @@ async def add_screenshots(
     *,
     session: Session = Depends(model.get_db_session),
     current_user_id: model.UserId = Depends(auth_handler.get_current_user_id),
-        screenshot: model.ScreenshotCreate):
+    screenshot: model.ScreenshotCreate):
     """
     Creates a new screenshot for the currently authenticated user.
 
@@ -157,7 +166,7 @@ async def add_screenshots(
 async def create_user(
     *,
     session: Session = Depends(model.get_db_session),
-        user: model.UserCreate = Body(...)):
+    user: model.UserCreate = Body(...)):
     """
     Creates a new user account.
 
