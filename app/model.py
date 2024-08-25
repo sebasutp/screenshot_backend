@@ -48,7 +48,7 @@ class ApiTokenCreate(SQLModel):
     name: str = Field(...)
     token: str = Field(...)
 
-class ApiToken(ApiTokenCreate, table=True)
+class ApiToken(ApiTokenCreate, table=True):
     id: int = Field(default=None, primary_key=True)
     owner_id: int | None = Field(default=None, foreign_key="user.id")
 
