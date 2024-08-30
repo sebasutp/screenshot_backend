@@ -5,6 +5,10 @@ might be for you. You might also want to check the Chrome plugin in
 [this repo](https://github.com/sebasutp/screenshot-capture) to capture
 screenshots from Chrome and add them to the backend.
 
+## Requirements
+
+* Make sure to use Python3.10 or newer.
+
 ## Want to test this project locally project?
 
 1. Fork/Clone
