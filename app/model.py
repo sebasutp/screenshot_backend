@@ -2,11 +2,11 @@
 """
 
 import os
+from datetime import datetime
 from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, Session, SQLModel, create_engine
-from datetime import datetime
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(
