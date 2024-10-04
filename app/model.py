@@ -2,6 +2,7 @@
 """
 
 import os
+from datetime import datetime
 from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr
@@ -59,6 +60,7 @@ class ScreenshotCreate(SQLModel):
 class ScreenshotBase(ScreenshotCreate):
     owner_id: int | None = Field(default=None, foreign_key="user.id")
     external_id: str = Field(default = None)
+    created_on: datetime
     #owner: User | None = Relationship(back_populates="screenshots")
 
 class Screenshot(ScreenshotBase, table=True):
