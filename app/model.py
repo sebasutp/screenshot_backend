@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, Session, SQLModel, create_engine
+from datetime import datetime
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(
@@ -59,6 +60,7 @@ class ScreenshotCreate(SQLModel):
 class ScreenshotBase(ScreenshotCreate):
     owner_id: int | None = Field(default=None, foreign_key="user.id")
     external_id: str = Field(default = None)
+    created_on: datetime
     #owner: User | None = Relationship(back_populates="screenshots")
 
 class Screenshot(ScreenshotBase, table=True):

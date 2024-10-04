@@ -12,6 +12,8 @@ from app.auth import auth_handler
 from app.auth import crypto
 from app import model
 
+import datetime
+
 
 app_obj = FastAPI()
 app_obj.add_middleware(
@@ -68,7 +70,7 @@ async def login(
 
 @app_obj.get("/screenshots", tags=["screenshots"], response_model=list[model.Screenshot])
 async def get_screenshots(
-    *,
+    num_screenshots: int = 3,
     session: Session = Depends(model.get_db_session),
     current_user_id: model.UserId = Depends(auth_handler.get_current_user_id)):
     """
@@ -90,7 +92,9 @@ async def get_screenshots(
         A list of `model.Screenshot` objects representing the user's screenshots.
     """
     statement = select(model.Screenshot).where(
-        model.Screenshot.owner_id == current_user_id.id)
+        model.Screenshot.owner_id == current_user_id.id).order_by(
+            model.Screenshot.created_on.desc()
+        ).limit(num_screenshots)
     return session.exec(statement)
 
 
@@ -154,7 +158,10 @@ async def add_screenshots(
         A `model.Screenshot` object representing the newly created screenshot.
     """
     screenshot_db = model.Screenshot.model_validate(
-        screenshot, update={"owner_id": current_user_id.id})
+        screenshot, update={
+            "owner_id": current_user_id.id,
+            "created_on": datetime.datetime.now()
+            })
     screenshot_db.external_id = crypto.generate_random_base64_string(32)
     session.add(screenshot_db)
     session.commit()
