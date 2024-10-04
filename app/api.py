@@ -1,6 +1,6 @@
 """API methods."""
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import Annotated
 
 from fastapi import Body, Depends, FastAPI, HTTPException
@@ -11,8 +11,6 @@ from sqlmodel import Session, select
 from app.auth import auth_handler
 from app.auth import crypto
 from app import model
-
-import datetime
 
 
 app_obj = FastAPI()
@@ -160,7 +158,7 @@ async def add_screenshots(
     screenshot_db = model.Screenshot.model_validate(
         screenshot, update={
             "owner_id": current_user_id.id,
-            "created_on": datetime.datetime.now()
+            "created_on": datetime.now()
             })
     screenshot_db.external_id = crypto.generate_random_base64_string(32)
     session.add(screenshot_db)
