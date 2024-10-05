@@ -1,5 +1,6 @@
 """API methods."""
 
+import os
 from datetime import timedelta, datetime
 from typing import Annotated
 
@@ -62,7 +63,8 @@ async def login(
     if not db_user:
         raise HTTPException(
             status_code=400, detail="Incorrect username or password")
-    token = auth_handler.create_access_token(db_user, timedelta(minutes=30))
+    time_out = int(os.getenv("TOKEN_TIMEOUT")) or 30
+    token = auth_handler.create_access_token(db_user, timedelta(minutes=time_out))
     return model.Token(access_token=token, token_type="bearer")
 
 

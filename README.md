@@ -31,6 +31,7 @@ screenshots from Chrome and add them to the backend.
     JWT_SECRET="some random secret key"
     JWT_ALGORITHM="HS256"
     DB_URL="sqlite:///database.db"
+    TOKEN_TIMEOUT=30
     ```
 
 5. Run the app:
